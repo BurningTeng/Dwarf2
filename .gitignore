@@ -1,0 +1,74 @@
+### Code ###
+.vscode/
+
+### Git ###
+*.orig
+*.BACKUP.*
+*.BASE.*
+*.LOCAL.*
+*.REMOTE.*
+*_BACKUP_*.txt
+*_BASE_*.txt
+*_LOCAL_*.txt
+*_REMOTE_*.txt
+
+### IntelliJ ###
+.idea
+out/
+
+### Python ###
+__pycache__/
+*.py[cod]
+*$py.class
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+### others ###
+frida
+.DS_Store
+Dwarf.iml
+.shortcuts
+.dwarf
+.git_cache
+.cache
+.sessions
+tools
+.decompile
+.tmp
+*.patch
+linter.py
+profiler.py
+venv
+venv3
+env
+*.ai
+plugins
+scripts
+.r2pipe*
+.ranges
+bin
+dwarf.egg-info
+build_resources.py
+*.qrc
+### windows ###
+desktop.ini
+Dwarf.iml
+.dwarf_last_session
+dwarf_window_pos.ini
