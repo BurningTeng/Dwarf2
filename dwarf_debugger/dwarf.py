@@ -139,7 +139,6 @@ def run_dwarf():
 
     QApplication.setOrganizationName("HookMultiplatform")
     QApplication.setApplicationName("Dwarf2")
-    #QApplication.setApplicationDisplayName('Dwarf2')
 
     qapp = QApplication([])
 

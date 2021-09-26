@@ -3799,6 +3799,7 @@ var LogicBreakpoint = function () {
     }, {
       key: "putBreakpoint",
       value: function putBreakpoint(target, condition) {
+        utils_1.Utils.logDebug('putBreakpoint target:' + target + " and condition:" + condition);
         if (typeof target === 'string') {
           if (target.startsWith('0x')) {
             target = ptr(target);
@@ -3848,8 +3849,9 @@ var LogicBreakpoint = function () {
     }, {
       key: "putNativeBreakpoint",
       value: function putNativeBreakpoint(breakpoint) {
+        utils_1.Utils.logDebug('putNativeBreakpoint enter breakpoint:' + breakpoint.target + breakpoint.target.constructor.name);
         breakpoint.interceptor = Interceptor.attach(breakpoint.target, function () {
-          utils_1.Utils.logDebug('putNativeBreakpoint enter ');
+          utils_1.Utils.logDebug('putNativeBreakpoint attach');
           breakpoint.interceptor.detach();
           Interceptor['flush']();
           LogicBreakpoint.breakpoint(LogicBreakpoint.REASON_BREAKPOINT, this.context.pc, this.context, null, breakpoint.condition);
