@@ -67,66 +67,10 @@ class FridaUpdateThread(QThread):
             self.onError.emit('ADB MinRequired')
             return
 
-        if not utils.is_connected():
-            self.onError.emit('Not connected')
-            return
-
-        if self._frida_update_url is None or self._frida_update_url == '':
-            self.onError.emit('Missing frida download url')
-            return
-
-        self.onStatusUpdate.emit('Downloading latest frida')
-
-        try:
-            if utils.is_connected():
-                request = requests.get(self._frida_update_url, stream=True)
-            else:
-                self.onError.emit('Not connected')
-                return
-        except requests.ConnectionError:
-            self.onError.emit('Failed to download latest frida')
-            return
-
-        # reset url
-        self._frida_update_url = None
-
-        if request is not None and request.status_code == 200:
-            # write data to local file
-            try:
-                with open('frida.xz', 'wb') as frida_archive:
-                    for chunk in request.iter_content(chunk_size=1024):
-                        if chunk:
-                            frida_archive.write(chunk)
-            except EnvironmentError:
-                self.onError.emit('Failed to write frida.xz')
-                return
-
-            # start extraction
-            if os.path.exists('frida.xz'):
-                self.onStatusUpdate.emit('Extracting latest frida')
-                try:
-                    with lzma.open('frida.xz') as frida_archive:
-                        with open('frida-server', 'wb') as frida_binary:
-                            frida_binary.write(frida_archive.read())
-
-                    # remove downloaded archive
-                    os.remove('frida.xz')
-                except lzma.LZMAError:
-                    self.onError.emit('Failed to extract frida.xz')
-                    return
-                except EnvironmentError:
-                    self.onError.emit('Failed to write frida')
-                    return
-            else:
-                self.onError.emit('Failed to open frida.xz')
-                return
-
+        if 1:
             self.onStatusUpdate.emit('Mounting devices filesystem')
             # mount system rw
             if self._adb.mount_system():
-                self.onStatusUpdate.emit('Pushing to device')
-                # push file to device
-                self._adb.push('frida-server', '/sdcard/')
                 self.onStatusUpdate.emit('Setting up and starting frida')
                 # kill frida
                 self._adb.kill_frida()
@@ -137,29 +81,19 @@ class FridaUpdateThread(QThread):
                     # use /system/bin
                     _device_path = _device_path.replace('x', '')
 
-                # copy file note: mv give sometimes a invalid id error
-                self._adb.su_cmd('cp /sdcard/frida-server ' + _device_path + '/frida-server')
-                # remove file
-                self._adb.su_cmd('rm ' + _device_path + '/frida')  # remove old named file
-                self._adb.su_cmd('rm /sdcard/frida-server')
-
                 # just to make sure
                 self._adb.su_cmd('chown root:root ' + _device_path + '/frida-server')
                 # make it executable
                 self._adb.su_cmd('chmod 06755 ' + _device_path + '/frida-server')
 
                 # start it
-                if self._adb.get_frida_version():
-                    if not self._adb.start_frida():
-                        self.onError.emit('Failed to start fridaserver on Device')
+                if not self._adb.start_frida():
+                    self.onError.emit('Failed to start fridaserver on Device')
             else:
                 print('failed to mount /system on device')
 
-            # delete extracted file
-            if os.path.exists('frida-server'):
-                os.remove('frida-server')
         else:
-            self.onError.emit('Failed to download latest frida! Error: %d' % request.status_code)
+            self.onError.emit('Failed to download latest frida! Error: %d')
             return
 
         self.onFinished.emit()
@@ -273,24 +207,24 @@ class DeviceBar(QWidget):
         self.update_label.setTextFormat(Qt.RichText)
         self.update_label.setFixedHeight(35)
         self.update_label.setTextInteractionFlags(Qt.TextBrowserInteraction)
-        self._install_btn = QPushButton('Install Frida', self.update_label)
+        self._install_btn = QPushButton('Install frida-server', self.update_label)
         self._install_btn.setStyleSheet('padding: 0; border-color: white;')
-        self._install_btn.setGeometry(self.update_label.width() - 110, 5, 100, 25)
+        self._install_btn.setGeometry(self.update_label.width() - 143, 5, 141, 25)
         self._install_btn.clicked.connect(self._on_install_btn)
         self._install_btn.setVisible(False)
-        self._start_btn = QPushButton('Start Frida', self.update_label)
+        self._start_btn = QPushButton('Start frida-server', self.update_label)
         self._start_btn.setStyleSheet('padding: 0; border-color: white;')
-        self._start_btn.setGeometry(self.update_label.width() - 110, 5, 100, 25)
+        self._start_btn.setGeometry(self.update_label.width() - 143, 5, 141, 25)
         self._start_btn.clicked.connect(self._on_start_btn)
         self._start_btn.setVisible(False)
-        self._update_btn = QPushButton('Update Frida', self.update_label)
+        self._update_btn = QPushButton('Update frida-server', self.update_label)
         self._update_btn.setStyleSheet('padding: 0; border-color: white;')
-        self._update_btn.setGeometry(self.update_label.width() - 110, 5, 100, 25)
+        self._update_btn.setGeometry(self.update_label.width() - 143, 5, 141, 25)
         self._update_btn.clicked.connect(self._on_install_btn)
         self._update_btn.setVisible(False)
-        self._restart_btn = QPushButton('Restart Frida', self.update_label)
+        self._restart_btn = QPushButton('Restart frida-server', self.update_label)
         self._restart_btn.setStyleSheet('padding: 0; border-color: white;')
-        self._restart_btn.setGeometry(self.update_label.width() - 110, 5, 100, 25)
+        self._restart_btn.setGeometry(self.update_label.width() - 143, 5, 141, 25)
         self._restart_btn.clicked.connect(self._on_restart_btn)
         self._restart_btn.setVisible(False)
         self._devices_combobox = QComboBox(self.update_label)
