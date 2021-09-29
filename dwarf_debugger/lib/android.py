@@ -29,9 +29,10 @@ class AndroidDecompileUtil(object):
             dex2jar + ' .decompile/base.apk -o .decompile/base.jar -f')
         if not external_tools.tool_exist('luyten.jar'):
             if os.name == 'nt':
-                external_tools.get_tool(
-                    'https://github.com/deathmarine/Luyten/releases/download/v0.5.4_Rebuilt_with_Latest_depenencies/luyten-0.5.4.exe',
-                    'luyten.exe')
+                pass
+                # external_tools.get_tool(
+                #     'https://github.com/deathmarine/Luyten/releases/download/v0.5.4_Rebuilt_with_Latest_depenencies/luyten-0.5.4.exe',
+                #     'luyten.exe')
             else:
                 external_tools.get_tool(
                     'https://github.com/deathmarine/Luyten/releases/download/v0.5.4_Rebuilt_with_Latest_depenencies/luyten-0.5.4.jar',
@@ -41,7 +42,7 @@ class AndroidDecompileUtil(object):
         try:
             if os.name == 'nt':
                 utils.do_shell_command(
-                    'tools/luyten.exe .decompile/base.jar &')
+                    'luyten.exe .decompile/base.jar &')
             else:
                 utils.do_shell_command(
                     'java -jar tools/luyten.jar .decompile/base.jar &')

@@ -109,7 +109,7 @@ def process_args():
 
 
 def _on_restart():
-    print('restarting dwarf...')
+    print('restarting dwarf2...')
     os.execl(sys.executable, os.path.abspath(__file__), *sys.argv)
 
 
@@ -250,7 +250,7 @@ def run_dwarf():
     except SystemExit as sys_err:
         if sys_err.code == 0:
             # thanks for using dwarf
-            print('Thank\'s for using Dwarf\nHave a nice day...')
+            print('Thank\'s for using Dwarf2\nHave a nice day...')
         else:
             # something was wrong
             print('sysexit with: %d' % sys_err.code)

@@ -1,3 +1,4 @@
+
 Global Shortcuts
 ---------------------------------------------
 CTRL+W  - Add new Watcher
