@@ -109,7 +109,7 @@ class Session(QObject):
                 print('* Trying to attach to {0}'.format(args.pid))
                 try:
                     self.dwarf.attach(args.pid, args.script, False)
-                    print('* Dwarf attached to {0}'.format(args.pid))
+                    print('* Dwarf2 attached to {0}'.format(args.pid))
                 except Exception as e:  # pylint: disable=broad-except
                     print('-failed-')
                     print('Reason: ' + str(e))
