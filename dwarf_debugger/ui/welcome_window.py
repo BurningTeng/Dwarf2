@@ -97,28 +97,6 @@ class DwarfUpdateThread(QThread):
 
     def run(self):
         return
-        self.on_status_text.emit('updating dwarf...')
-
-        try:
-            utils.do_shell_command('git --version')
-        except IOError as io_error:
-            if io_error.errno == 2:
-                # git command not available
-                self.on_status_text.emit(
-                    'error while updating: git not available on your system')
-                self.on_finished.emit(
-                    'error while updating: git not available on your system')
-                return
-
-        utils.do_shell_command(
-            'git fetch -q https://github.com/iGio90/Dwarf.git')
-        utils.do_shell_command('git checkout -f -q master')
-        utils.do_shell_command('git reset --hard FETCH_HEAD')
-        sha = utils.do_shell_command('git log -1 master --pretty=format:%H')
-
-        s = ('Dwarf updated to commit := {0} - Please restart...'.format(sha))
-        self.on_status_text.emit(s)
-        self.on_finished.emit(sha)
 
 
 class UpdateBar(QWidget):
@@ -137,28 +115,8 @@ class UpdateBar(QWidget):
         """
         h_box = QHBoxLayout()
         h_box.setContentsMargins(0, 0, 0, 0)
-        update_label = QLabel(
-            'A newer Version of Dwarf is available. Checkout <a style="color:white;" '
-            'href="https://github.com/iGio90/Dwarf">Dwarf on GitHub</a> for more informations'
-        )
-        update_label.setOpenExternalLinks(True)
-        update_label.setTextFormat(Qt.RichText)
-        update_label.setTextInteractionFlags(Qt.TextBrowserInteraction)
-
-        self.update_button = QPushButton('Update now!', update_label)
-        self.update_button.setStyleSheet('padding: 0; border-color: white;')
-        self.update_button.setGeometry(
-            self.parent().width() - 10 - update_label.width() * .2, 5,
-            update_label.width() * .2, 25)
-        self.update_button.clicked.connect(self.update_now_clicked)
-        #self.setMaximumHeight(35)
-        h_box.addWidget(update_label)
         self.setLayout(h_box)
 
-    def update_now_clicked(self):
-        """ Update Button clicked
-        """
-        self.onUpdateNowClicked.emit()
 
     def showEvent(self, QShowEvent):
         h_center = self.update_button.parent().rect().center() - \
@@ -223,12 +181,6 @@ class WelcomeDialog(QDialog):
         path_to_gitignore = os.path.join(self._base_path, os.pardir, os.pardir, '.gitignore')
         is_git_version = os.path.exists(path_to_gitignore)
 
-        if is_git_version and os.path.isfile(path_to_gitignore):
-            self.update_commits_thread = DwarfCommitsThread(parent)
-            self.update_commits_thread.on_update_available.connect(
-                self._on_dwarf_isupdate)
-            self.update_commits_thread.start()
-
         # center
         self.setGeometry(
             QStyle.alignedRect(Qt.LeftToRight, Qt.AlignCenter, self.size(),
@@ -239,12 +191,6 @@ class WelcomeDialog(QDialog):
         """
         main_wrap = QVBoxLayout()
         main_wrap.setContentsMargins(0, 0, 0, 0)
-
-        # updatebar on top
-        self.update_bar = UpdateBar(self)
-        self.update_bar.onUpdateNowClicked.connect(self._update_dwarf)
-        self.update_bar.setVisible(False)
-        main_wrap.addWidget(self.update_bar)
 
         # main content
         h_box = QHBoxLayout()
@@ -341,36 +287,6 @@ class WelcomeDialog(QDialog):
         h_box.addLayout(wrapper, stretch=False)
         main_wrap.addLayout(h_box)
         self.setLayout(main_wrap)
-
-
-    def _on_dwarf_isupdate(self):
-        if not utils.is_connected():
-            return
-
-        self.update_bar.setVisible(True)
-        self.setFixedHeight(self.height() + self.update_bar.height())
-        self.onIsNewerVersion.emit()
-
-    def _update_dwarf(self):
-        path_to_version = os.path.join(self._base_path, os.pardir, os.pardir, 'VERSION')
-        if not os.path.exists(path_to_version):
-            if utils.is_connected():
-                try:
-                    # file exists in dwarf >2.0.0 wich means update from 1.x to 2.x
-                    request = requests.get('https://raw.githubusercontent.com/iGio90/Dwarf/master/VERSION')
-                    if request.ok:
-                        utils.show_message_box('This update will break your Dwarf installation!\nSee GitHub for more infos')
-                        from PyQt5.QtCore import QUrl
-                        from PyQt5.QtGui import QDesktopServices
-                        QDesktopServices.openUrl(QUrl('https://github.com/iGio90/Dwarf'))
-                        return
-                except:
-                    pass
-
-        self._update_thread = DwarfUpdateThread(self)
-        self._update_thread.on_finished.connect(self._update_finished)
-        if not self._update_thread.isRunning():
-            self._update_thread.start()
 
     def _update_finished(self):
         self.onUpdateComplete.emit()

@@ -290,10 +290,6 @@ class AppWindow(QMainWindow):
                 self.menu.addMenu(tools_menu)
 
         about_menu = QMenu('About', self)
-        about_menu.addAction('Dwarf on GitHub', self._menu_github)
-        about_menu.addAction('Documention', self._menu_documentation)
-        about_menu.addAction('Api', self._menu_api)
-        about_menu.addAction('Slack', self._menu_slack)
         about_menu.addSeparator()
 
         about_menu.addAction('Info', self._show_about_dlg)
@@ -413,26 +409,6 @@ class AppWindow(QMainWindow):
         if show_panel:
             self.show_main_tab('debug')
         self.debug_panel.jump_to_address(ptr, view=view)
-
-    @pyqtSlot(name='mainMenuGitHub')
-    def _menu_github(self):
-        QDesktopServices.openUrl(QUrl('https://github.com/iGio90/Dwarf'))
-
-    @pyqtSlot(name='mainMenuApi')
-    def _menu_api(self):
-        QDesktopServices.openUrl(QUrl('https://igio90.github.io/Dwarf/'))
-
-    @pyqtSlot(name='mainMenuDocumentation')
-    def _menu_documentation(self):
-        QDesktopServices.openUrl(QUrl('http://www.giovanni-rocca.com/dwarf/'))
-
-    @pyqtSlot(name='mainMenuSlack')
-    def _menu_slack(self):
-        QDesktopServices.openUrl(
-            QUrl('https://join.slack.com/t/resecret/shared_invite'
-                 '/enQtMzc1NTg4MzE3NjA1LTlkNzYxNTIwYTc2ZTYyOWY1MT'
-                 'Q1NzBiN2ZhYjQwYmY0ZmRhODQ0NDE3NmRmZjFiMmE1MDYwN'
-                 'WJlNDVjZDcwNGE'))
 
     def _show_about_dlg(self):
         about_dlg = AboutDialog(self)
