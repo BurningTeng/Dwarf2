@@ -8,7 +8,7 @@ class DwarfDialog(QDialog):
 
     def __init__(self, parent=None):
         super().__init__(parent=parent)
-        self._title = "Dwarf"
+        self._title = "Dwarf2"
         self.setWindowFlag(Qt.WindowContextHelpButtonHint, False)
         self.setWindowFlag(Qt.WindowCloseButtonHint, True)
 

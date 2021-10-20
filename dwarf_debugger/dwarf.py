@@ -220,7 +220,7 @@ def run_dwarf():
                     pass
 
             # fix for showing dwarf icon in windows taskbar instead of pythonicon
-            _appid = u'iGio90.dwarf.debugger'
+            _appid = u'burning.dwarf2.debugger'
             ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(
                 _appid)
 

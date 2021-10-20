@@ -59,9 +59,6 @@ class JsEditorDialog(DwarfDialog):
             self.btn_save = QPushButton('save')
             self.btn_save.clicked.connect(self.handler_save)
             top_buttons.addWidget(self.btn_save)
-        dwarf = QPushButton('dwarf')
-        dwarf.clicked.connect(self.handler_dwarf_scripts)
-        top_buttons.addWidget(dwarf)
 
         inject = QPushButton('inject')
         inject.clicked.connect(self.handler_inject)

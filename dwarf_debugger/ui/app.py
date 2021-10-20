@@ -296,19 +296,7 @@ class AppWindow(QMainWindow):
         self.menu.addMenu(about_menu)
 
     def _show_plugin_about(self, plugin):
-        plugin = self.plugin_manager.plugins[plugin]
-        if plugin:
-            info = plugin.__get_plugin_info__()
-
-            version = utils.safe_read_map(info, 'version', '')
-            description = utils.safe_read_map(info, 'description', '')
-            author = utils.safe_read_map(info, 'author', '')
-            homepage = utils.safe_read_map(info, 'homepage', '')
-            license_ = utils.safe_read_map(info, 'license', '')
-
-            utils.show_message_box(
-                'Name: {0}\nVersion: {1}\nDescription: {2}\nAuthor: {3}\nHomepage: {4}\nLicense: {5}'.
-                    format(plugin.name, version, description, author, homepage, license_))
+        pass
 
     def _enable_update_menu(self):
         self._is_newer_dwarf = True

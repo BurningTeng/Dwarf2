@@ -50,20 +50,6 @@ class Git(object):
                 }))
         return data
 
-    def get_dwarf_releases(self):
-        return self._open_cache(
-            Git.DWARF_CACHE, 'https://api.github.com/repos/iGio90/dwarf/releases')
-
-    def get_dwarf_commits(self):
-        return self._open_cache(
-            Git.DWARF_COMMITS_CACHE, 'https://api.github.com/repos/iGio90/dwarf/commits')
-
-    def get_dwarf_scripts(self):
-        return self._open_cache(
-            Git.DWARF_SCRIPTS_CACHE,
-            'https://raw.githubusercontent.com/iGio90/DwarfScripts/master/.gitmodules',
-            _json=False)
-
     def get_frida_version(self):
         return self._open_cache(
             Git.FRIDA_CACHE, 'https://api.github.com/repos/frida/frida/releases/latest')

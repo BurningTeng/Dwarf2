@@ -324,6 +324,7 @@ class Dwarf(QObject):
             self._script.on('message', self._on_message)
             self._script.on('destroyed', self._on_script_destroyed)
             self._script.load()
+            self._process.enable_debugger()
 
             break_at_start = break_at_start or self._app_window.dwarf_args.break_start
             # we invalidate the arg in any case (set this from ui needs a store in args for an eventual restore session)
