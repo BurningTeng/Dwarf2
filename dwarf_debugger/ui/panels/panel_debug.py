@@ -110,8 +110,8 @@ class QDebugPanel(QMainWindow):
                 self.dock_memory_panel.show()
             self.raise_memory_panel()
 
-            if self.disassembly_panel.number_of_lines() == 0:
-                self.disassembly_panel.disasm(base, data, offset)
+            #if self.disassembly_panel.number_of_lines() == 0:
+            self.disassembly_panel.disasm(base, data, offset)
         elif view == DEBUG_VIEW_DISASSEMBLY:
             self.disassembly_panel.disasm(base, data, offset)
             if not self.dock_disassembly_panel.isVisible():

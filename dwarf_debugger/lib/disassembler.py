@@ -53,12 +53,15 @@ class DisassembleThread(QThread):
                 self._debug_symbols_indexes.append(str(len(self._instructions)))
 
             if self._num_instructions < 1:
+                # 判断函数结束位置 根据ret指令或者最多1024个指令
                 if cap_inst.group(CS_GRP_RET) or cap_inst.group(ARM64_GRP_RET) or \
                         self._counter > self._max_instruction:
+                    self._instructions.append(dwarf_instruction)
                     break
 
             self._instructions.append(dwarf_instruction)
 
+        # For jump or call
         if self._debug_symbols:
             symbols = self._dwarf.dwarf_api('getDebugSymbols', json.dumps(self._debug_symbols))
             if symbols:
