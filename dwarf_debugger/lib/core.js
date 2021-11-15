@@ -1682,7 +1682,17 @@ var Api = /*#__PURE__*/function () {
 
       var header = _module.base.readByteArray(4);
 
+      /* ELF魔数：7f 45 4c 46 01 01 01 00 00 00 00 00 00 00 00 00
+        0x7f ：ASCII的DEL控制符
+        0x45 ：E
+        0x4c ：L
+        0x46 ：F
+        0x01 ：32位，0x02：64位
+        0x01 ：小端，0x01：大端，0x00：无效
+        0x01 ：ELF版本号
+      */
       if (header[0] !== 0x7f && header[1] !== 0x45 && header[2] !== 0x4c && header[3] !== 0x46) {
+        //为什么是24?
         _module["entry"] = _module.base.add(24).readPointer();
       }
 
@@ -3559,6 +3569,7 @@ var DwarfInterceptor = /*#__PURE__*/function () {
       if (context !== null) {
         proxiedContext = new Proxy(context, {
           get: function get(object, prop) {
+            utils_1.Utils.logDebug('[' + tid + '] sendInfos - proxiedContext get');
             return object[prop];
           },
           set: function set(object, prop, value) {
@@ -4044,6 +4055,7 @@ var LogicInitialization = function () {
                 loadlibexw_ptr = symbol.address;
               }
 
+              //return 个人理解是结束当前回调函数
               if (loadliba_ptr != NULL && loadlibw_ptr != NULL && loadlibexa_ptr != NULL && loadlibexw_ptr != NULL) {
                 return;
               }
